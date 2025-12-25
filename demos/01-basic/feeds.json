@@ -1,0 +1,74 @@
+{
+  "feeds": [
+    {
+      "name": "ETH/USD chainlink",
+      "pair": "ETH/USD",
+      "price": 3001.25,
+      "updated_at": 1717000400,
+      "heartbeat": 3600,
+      "deviation_threshold": 0.5,
+      "round_id": 1042,
+      "prev_round_id": 1041,
+      "prev_price": 2998.10,
+      "liquidity_usd": 8000000
+    },
+    {
+      "name": "ETH/USD backup-cex",
+      "pair": "ETH/USD",
+      "price": 3000.00,
+      "updated_at": 1717000550,
+      "heartbeat": 3600,
+      "deviation_threshold": 0.5,
+      "round_id": 5501,
+      "prev_round_id": 5500,
+      "prev_price": 2999.50
+    },
+    {
+      "name": "ETH/USD dex-twap",
+      "pair": "ETH/USD",
+      "price": 2999.40,
+      "updated_at": 1716993400,
+      "heartbeat": 3600,
+      "deviation_threshold": 1.0,
+      "round_id": 77,
+      "prev_round_id": 76,
+      "prev_price": 2990.00,
+      "liquidity_usd": 1200000
+    },
+    {
+      "name": "BTC/USD chainlink",
+      "pair": "BTC/USD",
+      "price": 68500.0,
+      "updated_at": 1717000500,
+      "heartbeat": 3600,
+      "deviation_threshold": 0.5,
+      "round_id": 2201,
+      "prev_round_id": 2200,
+      "prev_price": 65300.0,
+      "liquidity_usd": 600000
+    },
+    {
+      "name": "BTC/USD backup-cex",
+      "pair": "BTC/USD",
+      "price": 65420.0,
+      "updated_at": 1717000560,
+      "heartbeat": 3600,
+      "deviation_threshold": 0.5,
+      "round_id": 9001,
+      "prev_round_id": 9000,
+      "prev_price": 65380.0
+    },
+    {
+      "name": "LINK/USD chainlink",
+      "pair": "LINK/USD",
+      "price": 14.20,
+      "updated_at": 1717000300,
+      "heartbeat": 3600,
+      "deviation_threshold": 1.0,
+      "round_id": 330,
+      "prev_round_id": 330,
+      "prev_price": 14.20,
+      "liquidity_usd": 150000
+    }
+  ]
+}
