@@ -1,2 +1,11 @@
-"""ORACLEWATCH — Monitors price-oracle feeds for staleness, deviation, and manipulation exposure, simulating TWAP/spot attack profitability per pool."""
-__version__ = "0.1.0"
+"""oraclewatch — part of the Cognis Neural Suite."""
+try:  # re-export the tool's public API + identity from core
+    from oraclewatch.core import *  # noqa: F401,F403
+except Exception:  # pragma: no cover
+    pass
+try:
+    from oraclewatch.core import TOOL_NAME, TOOL_VERSION
+except Exception:  # pragma: no cover
+    TOOL_NAME = "oraclewatch"
+    TOOL_VERSION = "0.1.0"
+__version__ = TOOL_VERSION
