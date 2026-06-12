@@ -16,7 +16,7 @@
 </div>
 
 ```bash
-pip install cognis-oraclewatch
+pip install "git+https://github.com/cognis-digital/oraclewatch.git"
 oraclewatch scan .            # → prioritized findings in seconds
 ```
 
@@ -50,7 +50,7 @@ Oracle manipulation is the #1 DeFi exploit root cause; a tool that prices the co
 ## Quick start
 
 ```bash
-pip install cognis-oraclewatch
+pip install "git+https://github.com/cognis-digital/oraclewatch.git"
 oraclewatch --version
 oraclewatch scan .                       # scan current project
 oraclewatch scan . --format json         # machine-readable
