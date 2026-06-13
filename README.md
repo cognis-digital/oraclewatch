@@ -37,9 +37,9 @@ oraclewatch scan .            # → prioritized findings in seconds
    ```bash
    oraclewatch check feeds.json --now 1718200000
    ```
-4. **Read the output** as JSON for alerting pipelines:
+4. **Read the output** as JSON for alerting pipelines (top-level `reports[]`, plus a `blocking` flag set when any finding is WARNING+):
    ```bash
-   oraclewatch --format json check feeds.json | jq '.[] | select(.stale)'
+   oraclewatch --format json check feeds.json | jq '.reports[] | select(.findings | length > 0)'
    ```
 5. **Automate** — run on a cron and route the JSON to your monitor:
    ```bash
