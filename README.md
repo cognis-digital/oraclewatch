@@ -20,6 +20,32 @@ pip install cognis-oraclewatch
 oraclewatch scan .            # → prioritized findings in seconds
 ```
 
+## Usage — step by step
+
+`oraclewatch` monitors price-oracle feeds for staleness, deviation, and other anomalies from a JSON description of one or more feeds.
+
+1. **Install**:
+   ```bash
+   pip install -e .
+   oraclewatch --version
+   ```
+2. **Check** a feeds JSON file (a list, or `{"feeds": [...]}`):
+   ```bash
+   oraclewatch check feeds.json
+   ```
+3. **Pin the evaluation time** to reproduce a staleness check at a fixed epoch:
+   ```bash
+   oraclewatch check feeds.json --now 1718200000
+   ```
+4. **Read the output** as JSON for alerting pipelines:
+   ```bash
+   oraclewatch --format json check feeds.json | jq '.[] | select(.stale)'
+   ```
+5. **Automate** — run on a cron and route the JSON to your monitor:
+   ```bash
+   oraclewatch --format json check feeds.json > oracle-health.json
+   ```
+
 ## Contents
 
 - [Why oraclewatch?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
