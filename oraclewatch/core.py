@@ -190,7 +190,7 @@ def analyze_feed(
     if age is not None and heartbeat is not None:
         if age > heartbeat:
             over = age - heartbeat
-            sev = Severity.CRITICAL if age > 2 * heartbeat else Severity.WARNING
+            sev = Severity.CRITICAL if age >= 2 * heartbeat else Severity.WARNING
             findings.append(
                 Finding(name, pair, "STALE", sev,
                         f"last update {age}s ago exceeds heartbeat {int(heartbeat)}s "

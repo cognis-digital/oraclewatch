@@ -5,7 +5,6 @@ import os
 import subprocess
 import sys
 
-import pytest
 
 from oraclewatch import (
     TOOL_NAME,

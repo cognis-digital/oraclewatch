@@ -16,9 +16,15 @@
 </div>
 
 ```bash
-pip install cognis-oraclewatch
+pip install "git+https://github.com/cognis-digital/oraclewatch.git"
 oraclewatch scan .            # → prioritized findings in seconds
 ```
+
+<!-- cognis:layman:start -->
+## What is this?
+
+Decentralized finance protocols rely on "oracles" — external services that report real-world prices (like ETH/USD) on-chain. If an oracle reports a stale, wrong, or manipulated price, attackers can drain funds from lending platforms and exchanges. `oraclewatch` reads a list of your oracle feeds, checks each one for problems like outdated prices, large deviations from peer sources, frozen values, and low-cost manipulation windows, and gives you a plain report with severity ratings. It is aimed at DeFi developers, smart-contract auditors, and protocol security teams who want a quick, scriptable safety check they can run in CI or hand off to an AI agent.
+<!-- cognis:layman:end -->
 
 ## Contents
 
@@ -47,10 +53,56 @@ Oracle manipulation is the #1 DeFi exploit root cause; a tool that prices the co
 <div align="right"><a href="#top">↑ back to top</a></div>
 
 <a name="quick-start"></a>
+<!-- cognis:domains:start -->
+## Domains
+
+**Primary domain:** Finance & Quant  ·  **JTF MERIDIAN division:** BLACKBOOK · ORACLE
+
+**Topics:** `cognis` `finance` `fintech` `quant`
+
+Part of the **Cognis Neural Suite** — 300+ source-available tools organized across 12 domains under the JTF MERIDIAN command structure. See the [suite on GitHub](https://github.com/cognis-digital) and [jtf-meridian](https://github.com/cognis-digital/jtf-meridian) for how the pieces fit together.
+<!-- cognis:domains:end -->
+
+<!-- cognis:install:start -->
+## Install
+
+`oraclewatch` is source-available (not published to PyPI) — every method below installs
+straight from GitHub. Pick whichever you prefer; the one-line scripts auto-detect
+the best tool available on your machine.
+
+**One-liner (Linux / macOS):**
+```sh
+curl -fsSL https://raw.githubusercontent.com/cognis-digital/oraclewatch/HEAD/install.sh | sh
+```
+
+**One-liner (Windows PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/cognis-digital/oraclewatch/HEAD/install.ps1 | iex
+```
+
+**Or install manually — any one of:**
+```sh
+pipx install "git+https://github.com/cognis-digital/oraclewatch.git"     # isolated (recommended)
+uv tool install "git+https://github.com/cognis-digital/oraclewatch.git"  # uv
+pip install "git+https://github.com/cognis-digital/oraclewatch.git"      # pip
+```
+
+**From source:**
+```sh
+git clone https://github.com/cognis-digital/oraclewatch.git
+cd oraclewatch && pip install .
+```
+
+Then run:
+```sh
+oraclewatch --help
+```
+<!-- cognis:install:end -->
+
 ## Quick start
 
 ```bash
-pip install cognis-oraclewatch
+pip install "git+https://github.com/cognis-digital/oraclewatch.git"
 oraclewatch --version
 oraclewatch scan .                       # scan current project
 oraclewatch scan . --format json         # machine-readable

@@ -43,14 +43,12 @@ def _fmt_table(reports: Sequence[FeedReport]) -> str:
     header = f"{'SEV':<4}  {'FEED':<26} {'PAIR':<10} {'CODE':<17} MESSAGE"
     lines.append(header)
     lines.append("-" * len(header))
-    any_finding = False
     for r in reports:
         if not r.findings:
             lines.append(f"{'OK ':<4}  {r.feed:<26} {r.pair:<10} {'-':<17} "
                          f"healthy (dev={r.deviation_pct}%, age={r.age_seconds}s)")
             continue
         for f in sorted(r.findings, key=lambda x: -int(x.severity)):
-            any_finding = True
             abbr = _SEV_ABBR.get(f.severity, "?")
             lines.append(f"{abbr:<4}  {f.feed:<26} {f.pair:<10} "
                          f"{f.code:<17} {f.message}")
@@ -67,7 +65,7 @@ def _fmt_table(reports: Sequence[FeedReport]) -> str:
         f"warning={counts[Severity.WARNING]}  "
         f"info={counts[Severity.INFO]}"
     )
-    if not any_finding:
+    if not has_blocking(reports):
         lines.append("all feeds healthy")
     return "\n".join(lines)
 
