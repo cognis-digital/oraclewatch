@@ -34,3 +34,6 @@ oraclewatch = "oraclewatch.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["oraclewatch"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
