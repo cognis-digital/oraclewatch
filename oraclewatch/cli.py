@@ -117,6 +117,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         parser.print_help()
         return 2
 
+    if args.now is not None and args.now < 0:
+        print("error: --now must be a non-negative unix timestamp", file=sys.stderr)
+        return 2
+
     try:
         feeds = load_feeds(args.feeds_file)
     except FileNotFoundError:
@@ -125,6 +129,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     except (ValueError, json.JSONDecodeError) as e:
         print(f"error: could not parse feeds: {e}", file=sys.stderr)
         return 2
+
+    if not feeds:
+        print("warning: feeds file contains no feed entries", file=sys.stderr)
 
     reports = analyze_feeds(feeds, now=args.now)
 

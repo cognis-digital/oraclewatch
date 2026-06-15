@@ -21,6 +21,7 @@ All detection logic is real arithmetic / comparison, no placeholders.
 from __future__ import annotations
 
 import json
+import math
 import time
 from dataclasses import dataclass, field, asdict
 from enum import IntEnum
@@ -57,6 +58,11 @@ class Finding:
         d = asdict(self)
         d["severity"] = int(self.severity)
         d["severity_label"] = self.severity.label
+        # Sanitize any non-finite floats in detail so output is valid JSON.
+        d["detail"] = {
+            k: (None if isinstance(v, float) and not math.isfinite(v) else v)
+            for k, v in d["detail"].items()
+        }
         return d
 
 
@@ -77,13 +83,18 @@ class FeedReport:
         return max(f.severity for f in self.findings)
 
     def to_dict(self) -> Dict[str, Any]:
+        # RFC 8259 forbids Infinity/NaN; serialize them as null so downstream
+        # JSON consumers (jq, JS JSON.parse, etc.) are not broken.
+        dev = self.deviation_pct
+        if dev is not None and not math.isfinite(dev):
+            dev = None
         return {
             "feed": self.feed,
             "pair": self.pair,
             "price": self.price,
             "age_seconds": self.age_seconds,
             "consensus": self.consensus,
-            "deviation_pct": self.deviation_pct,
+            "deviation_pct": dev,
             "worst_severity": int(self.worst),
             "worst_severity_label": self.worst.label,
             "findings": [f.to_dict() for f in self.findings],
@@ -97,6 +108,8 @@ def load_feeds(path: str) -> List[Dict[str, Any]]:
         data = json.load(fh)
     if isinstance(data, dict) and "feeds" in data:
         data = data["feeds"]
+        if not isinstance(data, list):
+            raise ValueError("'feeds' key must be a JSON list")
     if not isinstance(data, list):
         raise ValueError("feed file must be a JSON list or have a 'feeds' list")
     return data
@@ -117,7 +130,9 @@ def consensus_price(feeds: Sequence[Dict[str, Any]], pair: str) -> Optional[floa
     prices = [
         p
         for f in feeds
-        if f.get("pair") == pair and (p := _num(f.get("price"))) is not None
+        if isinstance(f, dict)
+        and f.get("pair") == pair
+        and (p := _num(f.get("price"))) is not None
     ]
     if not prices:
         return None
@@ -285,9 +300,34 @@ def analyze_feeds(
     feeds: Iterable[Dict[str, Any]],
     now: Optional[float] = None,
 ) -> List[FeedReport]:
-    """Analyze every feed. Returns one FeedReport per feed."""
+    """Analyze every feed. Returns one FeedReport per feed.
+
+    Non-dict entries are skipped with a CRITICAL NO_PRICE finding so that a
+    malformed element never aborts the entire run.
+    """
     feed_list = list(feeds)
-    return [analyze_feed(f, feed_list, now=now) for f in feed_list]
+    results: List[FeedReport] = []
+    for entry in feed_list:
+        if not isinstance(entry, dict):
+            # Emit a sentinel report instead of raising AttributeError.
+            sentinel = FeedReport(
+                feed="<invalid>",
+                pair="?",
+                price=None,
+                age_seconds=None,
+                consensus=None,
+                deviation_pct=None,
+                findings=[
+                    Finding(
+                        "<invalid>", "?", "INVALID_ENTRY", Severity.CRITICAL,
+                        f"feed entry is not a JSON object (got {type(entry).__name__})",
+                    )
+                ],
+            )
+            results.append(sentinel)
+        else:
+            results.append(analyze_feed(entry, feed_list, now=now))
+    return results
 
 
 def has_blocking(reports: Sequence[FeedReport]) -> bool:
