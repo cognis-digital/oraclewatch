@@ -190,7 +190,7 @@ def analyze_feed(
     if age is not None and heartbeat is not None:
         if age > heartbeat:
             over = age - heartbeat
-            sev = Severity.CRITICAL if age > 2 * heartbeat else Severity.WARNING
+            sev = Severity.CRITICAL if age >= 2 * heartbeat else Severity.WARNING
             findings.append(
                 Finding(name, pair, "STALE", sev,
                         f"last update {age}s ago exceeds heartbeat {int(heartbeat)}s "
@@ -262,7 +262,10 @@ def analyze_feed(
         cost = _attack_cost(band, liquidity)
         # Flag thin feeds where pushing past the band is cheap.
         if cost < liquidity * 0.01 or cost < 50000:
-            sev = Severity.WARNING if cost < 25000 else Severity.INFO
+            # Only WARN on genuinely thin/cheap feeds; deeper pools are informational.
+            sev = (Severity.WARNING
+                   if (cost < 5000 or liquidity < 1_000_000)
+                   else Severity.INFO)
             findings.append(
                 Finding(name, pair, "CHEAP_TO_ATTACK", sev,
                         f"~${cost:,.0f} to push {band:.2f}% past band "

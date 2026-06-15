@@ -67,8 +67,8 @@ def _fmt_table(reports: Sequence[FeedReport]) -> str:
         f"warning={counts[Severity.WARNING]}  "
         f"info={counts[Severity.INFO]}"
     )
-    if not any_finding:
-        lines.append("all feeds healthy")
+    if counts.get(Severity.CRITICAL, 0) == 0 and counts.get(Severity.WARNING, 0) == 0:
+        lines.append("all feeds healthy")     # info-level notes don't gate / don't unhealth
     return "\n".join(lines)
 
 
