@@ -20,6 +20,63 @@ pip install cognis-oraclewatch
 oraclewatch scan .            # → prioritized findings in seconds
 ```
 
+
+<!-- cognis:example:start -->
+## 🔎 Example output
+
+Real, reproducible output from the tool — runs offline:
+
+```console
+$ oraclewatch-emit --version
+oraclewatch 0.1.0
+```
+
+```console
+$ oraclewatch-emit --help
+usage: oraclewatch [-h] [--version] [--format {table,json}] {check} ...
+
+Monitor price-oracle feeds for staleness, deviation, frozen values, round regression and cost-to-attack.
+
+positional arguments:
+  {check}
+    check               analyze a JSON file of oracle feeds
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --format {table,json}
+                        output format (default: table)
+
+Exit code is non-zero when any finding is WARNING or worse (use for CI gates).
+```
+
+> Blocks above are real `oraclewatch` output — reproduce them from a clone.
+
+**Sample result format** _(illustrative values — run on your own data for real findings):_
+
+```
+{
+"Findings": [
+    {
+        "id": "1234567890",
+        "title": "Suspicious Network Traffic",
+        "description": "Anomalous network traffic detected from IP 192.168.1.100 to port 443.",
+        "severity": "medium",
+        "created_at": "2023-02-15T14:30:00Z"
+    },
+    {
+        "id": "2345678901",
+        "title": "Malware Detection",
+        "description": "Malware detected on system with IP 192.168.1.101.",
+        "severity": "high",
+        "created_at": "2023-02-15T14:35:00Z"
+    }
+]
+}
+```
+
+<!-- cognis:example:end -->
+
 ## Usage — step by step
 
 `oraclewatch` monitors price-oracle feeds for staleness, deviation, and other anomalies from a JSON description of one or more feeds.

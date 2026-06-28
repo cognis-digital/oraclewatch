@@ -1,0 +1,17 @@
+$ oraclewatch-emit --help
+
+usage: oraclewatch [-h] [--version] [--format {table,json}] {check} ...
+
+Monitor price-oracle feeds for staleness, deviation, frozen values, round regression and cost-to-attack.
+
+positional arguments:
+  {check}
+    check               analyze a JSON file of oracle feeds
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --format {table,json}
+                        output format (default: table)
+
+Exit code is non-zero when any finding is WARNING or worse (use for CI gates).

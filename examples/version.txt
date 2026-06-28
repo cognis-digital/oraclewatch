@@ -1,0 +1,3 @@
+$ oraclewatch-emit --version
+
+oraclewatch 0.1.0
